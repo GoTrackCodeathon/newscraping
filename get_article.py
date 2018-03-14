@@ -1,6 +1,3 @@
-## This scripts uses the Python package Newspaper, an article scraping & curation
-## library, to scrape the full text of specific articles when provided with the URL.
-## The full text is then stored in the corresponding SQL table.
 
 from mysqldb import db
 from contextlib import closing
@@ -9,7 +6,7 @@ from newspaper import Article
 
 with closing(db.cursor()) as cur:
     cur.execute("""
-    select URL from db.table1 where (Full_Text = '' OR Full_Text IS NULL)
+    select URL from db.newscraping where (Full_Text = '' OR Full_Text IS NULL)
     """)
     rows = cur.fetchall()
     for record in rows:
@@ -28,6 +25,6 @@ with closing(db.cursor()) as cur:
         else:
             scraped_content = 'None'
         cur.execute("""
-        UPDATE db.table1 SET Full_Text = %s WHERE URL = %s
+        UPDATE db.newscraping SET Full_Text = %s WHERE URL = %s
         """,(scraped_content,url))
         db.commit()
